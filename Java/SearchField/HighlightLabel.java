@@ -1,4 +1,6 @@
-
+/**
+ * Specialized label class to highlight text.
+ */
 public class HighlightLabel extends JLabel {
 
     private static final int X_RECT_POS = 0;
