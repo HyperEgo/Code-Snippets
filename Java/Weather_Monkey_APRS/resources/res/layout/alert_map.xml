@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <HorizontalScrollView android:background="#800000" android:padding="5dp" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                <ImageView android:id="@+id/imgMap" android:background="@drawable/mercator_stars_no_grid" android:padding="5dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+        <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <TextView android:textColor="#000000" android:id="@+id/txtMap" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15dp" android:layout_marginTop="15dp" android:text="@string/map_explain"/>
+            <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15dp" android:layout_marginBottom="25dp">
+                <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="25dp">
+                    <TextView android:textColor="#000000" android:id="@+id/vLat" android:padding="5dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/title_lat" android:singleLine="true"/>
+                    <EditText android:textColor="#000000" android:id="@+id/txtLat" android:background="#ffffff" android:padding="5dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="Lat" android:singleLine="true" android:maxLength="7" android:inputType="numberDecimal"/>
+                </LinearLayout>
+                <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                    <TextView android:textColor="#000000" android:id="@+id/vLong" android:padding="5dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/title_long" android:singleLine="true"/>
+                    <EditText android:textColor="#000000" android:id="@+id/txtLong" android:background="#ffffff" android:padding="5dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="Long" android:singleLine="true" android:maxLength="7" android:inputType="numberDecimal"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

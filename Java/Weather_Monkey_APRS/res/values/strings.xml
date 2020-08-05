@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="abc_action_bar_home_description">Navigate home</string>
+    <string name="abc_action_bar_up_description">Navigate up</string>
+    <string name="abc_action_menu_overflow_description">More options</string>
+    <string name="abc_action_mode_done">Done</string>
+    <string name="abc_activity_chooser_view_see_all">See all</string>
+    <string name="abc_activitychooserview_choose_application">Choose an app</string>
+    <string name="abc_searchview_description_clear">Clear query</string>
+    <string name="abc_searchview_description_query">Search query</string>
+    <string name="abc_searchview_description_search">Search</string>
+    <string name="abc_searchview_description_submit">Submit query</string>
+    <string name="abc_searchview_description_voice">Voice search</string>
+    <string name="abc_shareactionprovider_share_with">Share with</string>
+    <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
+    <string name="abc_action_bar_home_description_format">%1$s, %2$s</string>
+    <string name="abc_action_bar_home_subtitle_description_format">%1$s, %2$s, %3$s</string>
+    <string name="abc_search_hint">Search…</string>
+    <string name="abc_toolbar_collapse_description">Collapse</string>
+    <string name="about_alert">"Thank you for using this application.
+
+ Created and developed by Burning Vigor Software.
+"</string>
+    <string name="about_alert1">"Thank you for using this application.
+
+ Created and developed by Burning Vigor Software.
+"</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">Weather Monkey APRS</string>
+    <string name="aprs_net"><b>APRS Network 1</b></string>
+    <string name="aprs_net2"><i>rotate.aprs.net</i></string>
+    <string name="aprs_net3"><b>APRS Network 2</b></string>
+    <string name="aprs_net4"><i>rotate.aprs2.net</i></string>
+    <string name="bar_press"><b>Bar Pressure : </b></string>
+    <string name="help_alert">"Get weather updates using APRS (Automatic Packet Reporting System), popular with Amateur Radio.
+
+ 1. Must input a Callsign or unique ID to connect to weather server.
+ 2. Choose a location for weather updates.
+ 3. Select an APRS weather server to receive reports.
+ 4. Select coverage radius to filter weather reports.
+"</string>
+    <string name="help_alert1">"View this thread for weather updates.
+
+ If no weather data displays but busy icon is spinning:
+ 1. Application needs active public network connection (e.g. Wi-fi) to work.
+ 2. Wait a short time, weather server may be busy.
+ 3. Click [Back] to select an alternate server.
+ 4. Click [Cancel] then [Connect] to restart thread.
+ 5. Close the application completely and restart.
+"</string>
+    <string name="hint_callsign"><i>Enter Callsign or ID</i></string>
+    <string name="humidity"><b>Humidity : </b></string>
+    <string name="location_select"><b>Select Location</b></string>
+    <string name="map_explain"><u>TIPS</u>" :
+ 1. Swipe to move map.
+ 2. Touch map to add lat and long values.
+ 3. Touch lat and long fields to directly edit values.
+ "</string>
+    <string name="radius1"><b>700 meters</b></string>
+    <string name="radius2"><b>500 meters</b></string>
+    <string name="radius3"><b>300 meters</b></string>
+    <string name="radius4"><b>1000 meters</b></string>
+    <string name="radius_select"><b>Select Coverage Radius</b></string>
+    <string name="rain_hour"><b>Rain Hour : </b></string>
+    <string name="rain_midnight"><b>Rain Night : </b></string>
+    <string name="reporter"><b>Reporter : </b></string>
+    <string name="server_select"><b>Select Weather Server</b></string>
+    <string name="settings_alert">Settings are disabled.</string>
+    <string name="settings_alert1">Settings are disabled.</string>
+    <string name="temp"><b>Temperature : </b></string>
+    <string name="test_string">Test label for Second Activity</string>
+    <string name="time_stamp"><b>Time Stamp : </b></string>
+    <string name="title_activity_second">Weather Report</string>
+    <string name="title_lat"><i>Latitude : </i></string>
+    <string name="title_long"><i>Longitude : </i></string>
+    <string name="title_map">\u0009Map Monkey - swipe to move</string>
+    <string name="uah_net"><b>University of AL Huntsville Blackhawk</b></string>
+    <string name="uah_net2"><i>blackhawk.ece.uah.edu</i></string>
+    <string name="wind_dir"><b>Wind Direct : </b></string>
+    <string name="wind_gust"><b>Wind Gust : </b></string>
+    <string name="wind_spd"><b>Wind Speed : </b></string>
+</resources>
