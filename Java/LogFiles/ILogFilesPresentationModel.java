@@ -5,10 +5,9 @@ import java.beans.PropertyChangeListener;
  */
 public interface ILogFilesPresentationModel {
 
-    String LOGGER_PROPERTY = "logger";
-    String FLAGGED_PROPERTY = "flagged";
-    String CONTENTS_PROPERTY = "contents";
-    String TIMER_PROPERTY = "timer";
+    String LOGGER_PROPERTY = "LOGGER_PROPERTY";
+    String CONTENTS_PROPERTY = "CONTENTS_PROPERTY";
+    String TIMER_PROPERTY = "TIMER_PROPERTY";
 
     void setData(ILogFiles logFiles);
     ILogFiles getData();

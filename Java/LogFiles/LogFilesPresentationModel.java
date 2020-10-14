@@ -20,7 +20,8 @@ public class LogFilesPresentationModel implements ILogFilesPresentationModel {
     @Override
     public void setData(ILogFiles logFiles) {
         /*
-        Check null, save old value, update local var, send data, fire prop chg event.
+         * Check for null, save old value,
+         * update local value, send data and fire event.
          */
         ILogFiles checkNullLogs = checkNull(logFiles);
         ILogFiles oldValue = loggerFiler;
@@ -70,9 +71,6 @@ public class LogFilesPresentationModel implements ILogFilesPresentationModel {
         if (parts.getResource().equals(null)) {
             parts.setResource(defaultLogs.getResource());
         }
-        if (parts.getFlagType() == null) {
-            parts.setFlagType(defaultLogs.getFlagType());
-        }
         return parts;
     }
 
@@ -83,7 +81,6 @@ public class LogFilesPresentationModel implements ILogFilesPresentationModel {
 
         private String subject;
         private String resource;
-        private LogFlagType flag;
 
         /**
          * Constructor.
@@ -91,7 +88,6 @@ public class LogFilesPresentationModel implements ILogFilesPresentationModel {
         public DefaultLogFiles() {
             subject = getDefaultSubject();
             resource = getDefaultResource();
-            flag = LogFlagType.UNMARK;
         }
 
         @Override
@@ -105,12 +101,6 @@ public class LogFilesPresentationModel implements ILogFilesPresentationModel {
 
         @Override
         public void setResource(String res) { resource = res; }
-
-        @Override
-        public LogFlagType getFlagType() { return flag; }
-
-        @Override
-        public void setFlagType(LogFlagType flg) { flag = flg; }
 
         @Override
         public int getCounter() { return 0; }

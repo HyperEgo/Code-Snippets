@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -8,14 +7,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * Display LogFiles data, list format.
- * Includes UI elements: checkbox, button, count down timer.
+ * Display log file data from presentation model (caught in panel class).
  */
 public class LogFilesList extends JList<ILogFiles> implements PropertyChangeListener {
 
     private static final String COMMIT = "Commit";
 
-    JCheckBox checkbox;
     JButton commitButton;
     PropertyChangeSupport pcs;
 
@@ -24,7 +21,6 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
      */
     public LogFilesList() {
 
-        checkbox = new JCheckBox();
         commitButton = new JButton(COMMIT);
         setModel(new DefaultListModel<ILogFiles>());
         setCellRenderer(createListCellRenderer());
@@ -46,7 +42,7 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
                         ILogFiles logger = (ILogFiles)list.getModel().getElementAt(index);
                         Rectangle rect = list.getCellBounds(index, index);
                         Point pointWithinCell = new Point(mouseEvent.getX() - rect.x, mouseEvent.getY() - rect.y);
-                        Rectangle crossRect = new Rectangle(commitButton.getX(), commitButton.getY(), commitButton.getWidth(), commitButton.getHeight());
+                        Rectangle crossRect = new Rectangle(commitButton.getX(), commitButton.getY(), commitButton.getWidth(), commitButton.getHeight());  //?
                         if ( crossRect.contains(pointWithinCell) ) {
                             setCommitButtonState(logger, ILogFiles.ButtonClickState.NOCLICK);
                             LogFilesList.this.repaint();
@@ -68,54 +64,19 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
                         ILogFiles logger = (ILogFiles)list.getModel().getElementAt(index);
                         Rectangle rect = list.getCellBounds(index, index);
                         Point pointWithinCell = new Point(mouseEvent.getX() - rect.x, mouseEvent.getY() - rect.y);
-
-                        // Approximate checkbox area for selected list row.
-//                        Rectangle crossRect = new Rectangle(checkbox.getX(), checkbox.getY(), checkbox.getWidth(), checkbox.getHeight());
-
-                        // Approximate commit button area for selected row.
-                        Rectangle crossRect = new Rectangle(commitButton.getX(), commitButton.getY(), commitButton.getWidth(), commitButton.getHeight());
+                        /**
+                         * Approximate commit button location area for selected row.
+                         */
+                        Rectangle crossRect = new Rectangle(commitButton.getX(), commitButton.getY(), commitButton.getWidth(), commitButton.getHeight());  //?
 
                         if ( crossRect.contains(pointWithinCell) ) {
-                            /*
-                            Toggle area for checkbox.
-                            Click area for commit button.
-                             */
-//                            pcs.firePropertyChange(ILogFilesPresentationModel.FLAGGED_PROPERTY, null, logger);
-//                            setCheckBoxState(logger);
                             setCommitButtonState(logger, ILogFiles.ButtonClickState.CLICK);
                             LogFilesList.this.repaint();
-                        }
-                        else {
-                            /*
-                            Non-checkbox area (e.g. subject).
-                             */
-//                            pcs.firePropertyChange(ILogFilesPresentationModel.CONTENTS_PROPERTY, null, logger);
                         }
                     }
                 }
             }
         });
-    }
-
-    private void setCheckBoxState(ILogFiles logState) {
-        if (logState.getFlagType() == ILogFiles.LogFlagType.MARK) {
-            logState.setFlagType(ILogFiles.LogFlagType.UNMARK);
-        }
-        else {
-            logState.setFlagType(ILogFiles.LogFlagType.MARK);
-        }
-    }
-
-    private JCheckBox getCheckBoxState(ILogFiles logCheck) {
-        JCheckBox boxer = new JCheckBox();
-        if (logCheck.getFlagType() == ILogFiles.LogFlagType.MARK) {
-            boxer.setSelected(true);
-            return boxer;
-        }
-        else {
-            boxer.setSelected(false);
-            return boxer;
-        }
     }
 
     private void setCommitButtonState(ILogFiles logger, ILogFiles.ButtonClickState buttonState) {
@@ -175,28 +136,24 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
         panel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        // check box
-        /*
-        c.gridx=0;
-        c.gridy=0;
-        c.weightx=0;
-        c.anchor = GridBagConstraints.WEST;
-        checkbox = new JCheckBox();
-        checkbox = getCheckBoxState(data);
-        c.insets = new Insets(1,1,1,5);
-        panel.add(checkbox, c);
-        */
-
-        // timer count down
+        // int timer count down
         c.gridx=0;
         c.gridy=0;
         c.weightx=1;
         c.anchor = GridBagConstraints.WEST;
         c.insets = new Insets(1,1,1,1);
-        panel.add(createLabelPanel(data.getCounter()), c);
+        panel.add(createLabelPanel(data.getCounter(), 17, Color.BLACK), c);
+
+        // string subject data
+        c.gridx=1;
+        c.gridy=0;
+        c.weightx=1;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(1,1,1,1);
+        panel.add(createLabelPanel(data.getSubject(), 75, Color.YELLOW), c);
 
         // commit button
-        c.gridx=1;
+        c.gridx=2;
         c.gridy=0;
         c.weightx=1;
         c.anchor = GridBagConstraints.WEST;
@@ -205,31 +162,23 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
         c.insets = new Insets(1,1,1,1);
         panel.add(commitButton, c);
 
-        // log data subject
-        /*
-        c.gridx=2;
-        c.gridy=0;
-        c.weightx=1;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(1,1,1,1);
-        panel.add(new JLabel(data.getSubject()), c);
-        */
-
         return panel;
     }
 
     /**
-     * Create panel with label for input integer.
-     * @param num
-     * @return
+     * Custom label with panel.
+     * @param counter - int
+     * @param labelWidth - int
+     * @param border - Color
+     * @return - JPanel
      */
-    private JPanel createLabelPanel(int num) {
-        final int swidth = 17;  // static width
+    private JPanel createLabelPanel(Object counter, int labelWidth, Color border) {
+        final int lwidth = labelWidth;
         JPanel p = new JPanel();
-        JLabel label = new JLabel(String.valueOf(num),JLabel.CENTER);
-        label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JLabel label = new JLabel(String.valueOf(counter),JLabel.CENTER);
+        label.setBorder(BorderFactory.createLineBorder(border));
         Dimension d = label.getPreferredSize();
-        label.setPreferredSize(new Dimension(swidth + 30, d.height));
+        label.setPreferredSize(new Dimension(lwidth + 30, d.height));
         p.add(label);
         return p;
     }
@@ -254,6 +203,10 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
         model.clear();
     }
 
+    /*
+     * Panel listeners and property change events.
+     */
+
     public void removeCustomPropertyChangeListener(PropertyChangeListener l) {
         pcs.removePropertyChangeListener(l);
     }
@@ -265,7 +218,7 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         /*
-        Catch timer property, disable button after timer expires.
+         * Catch Timer Property, disable Commit button
          */
         if (evt.getPropertyName().equals(ILogFilesPresentationModel.TIMER_PROPERTY)) {
             int indx = (int)evt.getNewValue();
@@ -274,20 +227,6 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
             loggy.setButtonEnableState(ILogFiles.ButtonEnableState.DISABLE);
             LogFilesList.this.repaint();
         }
-    }
-
-    /**
-     * Simulate mouse click programmatically (not used).
-     * Reference only.
-     * @param x - int
-     * @param y - int
-     * @throws AWTException
-     */
-    public static void roboClick(int x, int y) throws AWTException {
-        Robot bot = new Robot();
-        bot.mouseMove(x, y);
-        bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-        bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
 }

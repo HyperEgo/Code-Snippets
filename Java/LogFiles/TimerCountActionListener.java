@@ -55,16 +55,17 @@ public class TimerCountActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         /*
-        Decrement counter.
-        Set counter to LogFile object.
-        Set LogFile object to list model at supplied index.
-        Check counter value, if expired - stop, fire evt.
+         * Check timer count down value.
+         * If zero, notify listeners.
+         * Else not zero, decrement value, set model.
          */
-        logger.setCounter(--counter);
-        model.set(index, logger);
         if ( counter <= 0 ) {
             stopTimer();
             pcs.firePropertyChange(ILogFilesPresentationModel.TIMER_PROPERTY, null, index);
+        }
+        else {
+            logger.setCounter(--counter);
+            model.set(index, logger);
         }
     }
 }

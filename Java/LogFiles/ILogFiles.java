@@ -1,9 +1,8 @@
 /**
- * Interface for LogFiles class bean.
+ * Interface for LogFiles bean.
  */
 public interface ILogFiles {
 
-    enum LogFlagType {MARK, UNMARK}
     enum ButtonEnableState {ENABLE, DISABLE}
     enum ButtonClickState {CLICK, NOCLICK}
 
@@ -12,9 +11,6 @@ public interface ILogFiles {
 
     String getResource();
     void setResource(String res);
-
-    LogFlagType getFlagType();
-    void setFlagType(LogFlagType flg);
 
     int getCounter();
     void setCounter(int count);

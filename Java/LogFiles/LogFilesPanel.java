@@ -1,8 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -16,7 +14,7 @@ public class LogFilesPanel extends JPanel {
 
     private VideoSubPanel videoSubPanel;
 
-    ILogFilesPresentationModel presenter;
+    private ILogFilesPresentationModel presenter;
 
     private static final boolean DEBUGGER = true;
 
@@ -37,7 +35,6 @@ public class LogFilesPanel extends JPanel {
      * @param panel - JPanel
      */
     private void initComponents(LogFilesPanel panel) {
-        GridBagConstraints ancestorConstraints = new GridBagConstraints();
 
         videoSubPanel = new VideoSubPanel();
 
@@ -56,17 +53,19 @@ public class LogFilesPanel extends JPanel {
         /*
         Add components to panel
          */
-        ancestorConstraints.fill = GridBagConstraints.VERTICAL;
-        ancestorConstraints.gridx=0;
-        ancestorConstraints.gridy=0;
-        ancestorConstraints.insets = new Insets(2,2,2,2);
-        add(logFilesSubPanel, ancestorConstraints);
+        GridBagConstraints panelConstraints = new GridBagConstraints();
 
-        ancestorConstraints.fill = GridBagConstraints.VERTICAL;
-        ancestorConstraints.gridx=1;
-        ancestorConstraints.gridy=0;
-        ancestorConstraints.insets = new Insets(2,2,2,2);
-        add(videoSubPanel, ancestorConstraints);
+        panelConstraints.fill = GridBagConstraints.VERTICAL;
+        panelConstraints.gridx=0;
+        panelConstraints.gridy=0;
+        panelConstraints.insets = new Insets(2,2,2,2);
+        panel.add(logFilesSubPanel, panelConstraints);
+
+        panelConstraints.fill = GridBagConstraints.VERTICAL;
+        panelConstraints.gridx=1;
+        panelConstraints.gridy=0;
+        panelConstraints.insets = new Insets(2,2,2,2);
+        panel.add(videoSubPanel, panelConstraints);
     }
 
     /**
@@ -89,10 +88,8 @@ public class LogFilesPanel extends JPanel {
     private class LogFilesSubPanel extends JPanel implements PropertyChangeListener {
 
         private static final int FIELD_WIDTH = 20;
-        private static final int SCROLL_WIDTH = 200;
-        private static final int SCROLL_HEIGHT = 300;
-
-        private static final int TEST_COUNTER = 22;
+        private static final int SCROLL_WIDTH = 350;
+        private static final int SCROLL_HEIGHT = 250;
 
         private JTextField logTextField;
         private LogFilesList logList;
@@ -105,7 +102,6 @@ public class LogFilesPanel extends JPanel {
         public LogFilesSubPanel(LogFilesList list) {
             setLayout(new GridBagLayout());
             setPanelDebugBorder(LogFilesSubPanel.this, DEBUGGER, Color.BLUE);
-            GridBagConstraints c = new GridBagConstraints();
 
             /*
             Initialize components
@@ -115,7 +111,7 @@ public class LogFilesPanel extends JPanel {
             logTextField.setText("Enter Log File # ");
 
             logList = list;
-            final String title = new String("<html> Mark &nbsp &nbsp Log File </html>");
+            final String title = new String("<html> JList with Custom Renderer + CountDown Timer </html>");
             scrollPane = new JScrollPane(logList);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane.getViewport().setView(list);
@@ -123,29 +119,12 @@ public class LogFilesPanel extends JPanel {
             scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(1,1,5,1), title,
                     TitledBorder.LEFT, TitledBorder.TOP));
 
-            /*
-            Add components to panel
-             */
-            // add text field
-            c.gridx=0;
-            c.gridy=0;
-            c.weightx=0;
-            c.insets = new Insets(1,1,5,1);
-            c.anchor = GridBagConstraints.FIRST_LINE_START;
-            add(logTextField, c);
+            GridBagConstraints c = new GridBagConstraints();
 
-            // add timer count down label - test
-            c.gridx=0;
-            c.gridy=1;
-            c.weightx=0;
-            c.insets = new Insets(1,1,1,1);
-            c.anchor = GridBagConstraints.WEST;
-            add(timerLabelCounter(TEST_COUNTER), c);
-
-            // add scrollpane
+            // Add scrollpane to panel
             c.fill = GridBagConstraints.VERTICAL;
             c.gridx=0;
-            c.gridy=2;
+            c.gridy=0;
             c.weightx=0;
             c.insets = new Insets(1,1,1,1);
             c.anchor = GridBagConstraints.PAGE_START;
@@ -154,8 +133,8 @@ public class LogFilesPanel extends JPanel {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            /*
-            catch logger property from pres model, add data to LogFiles list
+            /**
+             * Add data to JList in presentation model, caught here.
              */
             if (evt.getPropertyName().equals(ILogFilesPresentationModel.LOGGER_PROPERTY)) {
                 ILogFiles logger = (ILogFiles)evt.getNewValue();
@@ -196,53 +175,6 @@ public class LogFilesPanel extends JPanel {
                 vPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(1,1,5,1), logger.getSubject(),
                         TitledBorder.LEFT, TitledBorder.TOP));
             }
-        }
-    }
-
-    /**
-     * Timer count down for JLabel.
-     * @param num - int
-     * @return - JPanel
-     */
-    private JPanel timerLabelCounter(int num) {
-        JPanel p = new JPanel();
-        JLabel label = new JLabel(String.valueOf(num),JLabel.CENTER);
-        label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        Dimension d = label.getPreferredSize();
-        label.setPreferredSize(new Dimension(d.width + 60, d.height));
-        p.add(label);
-        TimerActionListener al = new TimerActionListener(num, label);
-        return p;
-    }
-
-    /**
-     * Timer count down class, JLabel.
-     */
-    private class TimerActionListener implements ActionListener {
-
-        private static final int DELAY_MILLISECONDS = 1000;
-
-        private int counter;
-        private javax.swing.Timer timer;
-        private JLabel label;
-
-        /**
-         * Constructor with int, JLabel arguments.
-         * @param ct - int
-         * @param la - JLabel
-         */
-        public TimerActionListener(int ct, JLabel la) {
-            counter = ct;
-            label = la;
-            timer = new javax.swing.Timer(DELAY_MILLISECONDS, this);
-            timer.start();
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-            --counter;
-            label.setText("" + counter);
-            if ( counter <= 0 ) timer.stop();
         }
     }
 }
