@@ -1,2 +1,2 @@
-# code snippets
-Snippets from various projects around the Ether: Java, Android, etc.
+# Code-Snippets
+Disjoint classes, design pattern notes, methods, functions, etc.
