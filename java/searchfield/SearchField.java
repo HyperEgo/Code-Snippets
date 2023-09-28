@@ -1,3 +1,5 @@
+package com.ultimate-rad-games;
+
 /**
  * Specialized textField class to sort data model based on text input.
  */
@@ -15,9 +17,7 @@ public class SearchField extends JTextField {
 
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void valueChanged(ListSelectionEvent event) {
-                SearchField.this.setText("");
-            }
+            public void valueChanged(ListSelectionEvent event) { SearchField.this.setText(""); }
         });
 
         this.getDocument().addDocumentListener(new DocumentListener() {
@@ -45,9 +45,7 @@ public class SearchField extends JTextField {
                 DefaultListModel<Object> dataModel = (DefaultListModel<Object>)list.getModel();
                 for (int i = 0; i < dataModel.size(); ++i) {
                     Object object = (Object)dataModel.getElementAt(i);
-                    if (startsWith(object.toString(), input )) {
-                        sortModel(dataModel, i);
-                    }
+                    if (startsWith(object.toString(), input )) { sortModel(dataModel, i); }
                 }
             }
         });
@@ -56,9 +54,9 @@ public class SearchField extends JTextField {
     /**
      * Constructor with int, JList, Color arguments.
      * Matches sort from top, add color highlights.
-     * @param width - int
-     * @param list - JList
-     * @param highlight - Color
+     * @param width int pane width
+     * @param list JList object input
+     * @param highlight Color highlight
      */
     public SearchField(int width, JList<Object> list, Color highlight) {
         super(width);
@@ -67,9 +65,7 @@ public class SearchField extends JTextField {
 
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void valueChanged(ListSelectionEvent event) {
-                SearchField.this.setText("");
-            }
+            public void valueChanged(ListSelectionEvent event) { SearchField.this.setText(""); }
         });
 
         this.getDocument().addDocumentListener(new DocumentListener() {
@@ -90,8 +86,8 @@ public class SearchField extends JTextField {
 
             /**
              * Sort JList to input string.
-             * @param list - JList
-             * @param input - string input
+             * @param list JList object input
+             * @param input String input
              */
             private void filter(JList<Object> list, String input ) {
                 DefaultListModel<Object> dataModel = (DefaultListModel<Object>)list.getModel();
@@ -104,9 +100,7 @@ public class SearchField extends JTextField {
                         header.setHighlightRegion(input);
                         sortModel(dataModel, i);
                     }
-                    else {
-                        header.setToggle(false);
-                    }
+                    else { header.setToggle(false); }
                 }
             }
         });
@@ -114,9 +108,9 @@ public class SearchField extends JTextField {
 
     /**
      * Compare string prefix to input.
-     * @param str - String
-     * @param prefix - String
-     * @return - boolean
+     * @param str String object input
+     * @param prefix String prefix
+     * @return boolean result compare
      */
     public boolean startsWith(String str, String prefix) {
         if ( str.isEmpty() || prefix.isEmpty() ) { return false; }
@@ -126,10 +120,10 @@ public class SearchField extends JTextField {
 
     /**
      * Compare string prefix to input; ignore case, true = yes, false = no
-     * @param str - String
-     * @param prefix - String
-     * @param ignoreCase - boolean
-     * @return - boolean
+     * @param str String object input
+     * @param prefix String prefix
+     * @param ignoreCase boolean case sensitive
+     * @return boolean result compare
      */
     public boolean startsWithIgnoreCase(String str, String prefix, boolean ignoreCase) {
         if ( str == null || prefix == null ) { return ( str == null && prefix == null ); }
@@ -140,8 +134,8 @@ public class SearchField extends JTextField {
 
     /**
      * Sort model to current index.
-     * @param model - DefaultListModel
-     * @param current - int
+     * @param model DefaultListModel list model object input
+     * @param current int index location
      */
     private void sortModel(DefaultListModel<Object> model, int current) {
         for (int i = 0; i < model.getSize(); ++i) { swapObjectAtIndex(model, current, i); }
@@ -149,9 +143,9 @@ public class SearchField extends JTextField {
 
     /**
      * Swap model object at input indices.
-     * @param model - DefaultListModel
-     * @param x - int
-     * @param y - int
+     * @param model DefaultListModel list model object input
+     * @param x int index location
+     * @param y int index locaton
      */
     public void swapObjectAtIndex(DefaultListModel<Object> model, int x, int y) {
         if ( x < 0 || y < 0 ) { return; }

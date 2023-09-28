@@ -1,3 +1,5 @@
+package com.ultimate-rad-games;
+
 /**
  * Specialized label class to highlight text.
  */
@@ -14,8 +16,8 @@ public class HighlightLabel extends JLabel {
 
     /**
      * Constructor.
-     * @param input - String input
-     * @param font - default font
+     * @param input String object input
+     * @param font Font selector
      */
     public HighlightLabel(String input, Font font) {
         super(input);
@@ -29,8 +31,8 @@ public class HighlightLabel extends JLabel {
 
     /**
      * Set highlight colors.
-     * @param fill - Color inner
-     * @param outer - Color outer
+     * @param fill Color inner field
+     * @param outer Color outer field
      */
     public void setHighlightColor(Color fill, Color outer) {
         this.highlight = fill;
@@ -39,7 +41,7 @@ public class HighlightLabel extends JLabel {
 
     /**
      * Set highlight toggle effect.
-     * @param toggle - boolean toggle control
+     * @param toggle boolean object toggle
      */
     public void setToggle(boolean toggle) {
         this.toggle = toggle;
@@ -48,7 +50,7 @@ public class HighlightLabel extends JLabel {
 
     /**
      * Set highlight region based on prefix.
-     * @param prefix - String input
+     * @param prefix String object input
      */
     public void setHighlightRegion(String prefix) {
         java.awt.FontMetrics metrics = this.getFontMetrics(font);
@@ -58,10 +60,7 @@ public class HighlightLabel extends JLabel {
     }
 
     @Override
-    protected void paintComponent(Graphic g) {
-        /**
-         * Paint, highlight rectangle, outer border, inner fill.
-         */
+    protected void paintComponent(Graphic g) {  // rectangle outer + inner color fill
         if ( toggle ) {
             Rectangle2D.Float rect = new Rectangle2D.Float(X_RECT_POS, Y_RECT_POS, width, height);
             Graphics2D g2d = (Graphics2D)g;

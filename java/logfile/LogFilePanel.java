@@ -1,3 +1,5 @@
+package com.ultimate-rad-games;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -5,74 +7,61 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * Main panel to display LogFiles data.
+ * Main panel to display LogFile data.
  */
-public class LogFilesPanel extends JPanel {
+public class LogFilePanel extends JPanel {
 
-    private LogFilesSubPanel logFilesSubPanel;
-    private LogFilesList logFilesList;
+    private LogFileSubPanel logFileSubPanel;
+    private LogFileList logFileList;
 
     private VideoSubPanel videoSubPanel;
 
-    private ILogFilesPresentationModel presenter;
+    private ILogFileModel presenter;
 
-    private static final boolean DEBUGGER = true;
+    private static final boolean DEBUG = true;
 
     /**
      * Constructor with presentation model argument.
-     * @param pm - ILogFilesPresentationModel
+     * @param pm ILogFileModel object input
      */
-    public LogFilesPanel(ILogFilesPresentationModel pm) {
+    public LogFilePanel(ILogFileModel pm) {
         setLayout(new GridBagLayout());
-        setPanelDebugBorder(this, DEBUGGER, Color.ORANGE);
+        setPanelDebugBorder(this, DEBUG, Color.ORANGE);
         presenter = pm;
-
         initComponents(this);
     }
 
     /**
      * Initialize components.
-     * @param panel - JPanel
+     * @param panel JPanel object input
      */
-    private void initComponents(LogFilesPanel panel) {
-
+    private void initComponents(LogFilePanel panel) {
         videoSubPanel = new VideoSubPanel();
+        logFileList = new LogFileList();
+        logFileList.addCustomPropertyChangeListener(videoSubPanel);
 
-        /*
-        Initialize logFilesList
-         */
-        logFilesList = new LogFilesList();
-        logFilesList.addCustomPropertyChangeListener(videoSubPanel);
+        logFileSubPanel = new LogFileSubPanel(logFileList);
+        presenter.addCustomPropertyListener(logFileSubPanel);
 
-        /*
-        Initialize logFilesSubPanel
-         */
-        logFilesSubPanel = new LogFilesSubPanel(logFilesList);
-        presenter.addCustomPropertyListener(logFilesSubPanel);
-
-        /*
-        Add components to panel
-         */
         GridBagConstraints panelConstraints = new GridBagConstraints();
-
         panelConstraints.fill = GridBagConstraints.VERTICAL;
         panelConstraints.gridx=0;
         panelConstraints.gridy=0;
-        panelConstraints.insets = new Insets(2,2,2,2);
-        panel.add(logFilesSubPanel, panelConstraints);
+        panelConstraints.insets = new Insets(2, 2, 2, 2);
+        panel.add(logFileSubPanel, panelConstraints);
 
         panelConstraints.fill = GridBagConstraints.VERTICAL;
-        panelConstraints.gridx=1;
-        panelConstraints.gridy=0;
-        panelConstraints.insets = new Insets(2,2,2,2);
+        panelConstraints.gridx = 1;
+        panelConstraints.gridy = 0;
+        panelConstraints.insets = new Insets(2, 2, 2, 2);
         panel.add(videoSubPanel, panelConstraints);
     }
 
     /**
      * Debugger method, sets JPanel color border.
-     * @param panel - JPanel
-     * @param debug - boolean
-     * @param border - Color
+     * @param panel JPanel panel input
+     * @param debug boolean debugger
+     * @param border Color object input
      */
     private void setPanelDebugBorder(JPanel panel, boolean debug, Color border) {
         final int BORDER_WIDTH = 1;
@@ -83,30 +72,27 @@ public class LogFilesPanel extends JPanel {
     }
 
     /**
-     * Sub panel, displays LogFiles data in JList.
+     * Sub panel, displays LogFile data in JList.
      */
-    private class LogFilesSubPanel extends JPanel implements PropertyChangeListener {
+    private class LogFileSubPanel extends JPanel implements PropertyChangeListener {
 
         private static final int FIELD_WIDTH = 20;
         private static final int SCROLL_WIDTH = 350;
         private static final int SCROLL_HEIGHT = 250;
 
         private JTextField logTextField;
-        private LogFilesList logList;
+        private LogFileList logList;
         private JScrollPane scrollPane;
 
         /**
          * Constructor with JList argument.
-         * @param list - LogFiles JList
+         * @param list LogFile list input
          */
-        public LogFilesSubPanel(LogFilesList list) {
+        public LogFileSubPanel(LogFileList list) {
             setLayout(new GridBagLayout());
-            setPanelDebugBorder(LogFilesSubPanel.this, DEBUGGER, Color.BLUE);
+            setPanelDebugBorder(LogFileSubPanel.this, DEBUG, Color.BLUE);
 
-            /*
-            Initialize components
-             */
-            logTextField = new JTextField(LogFilesSubPanel.FIELD_WIDTH / 2);
+            logTextField = new JTextField(LogFileSubPanel.FIELD_WIDTH / 2);
             logTextField.setEditable(true);
             logTextField.setText("Enter Log File # ");
 
@@ -115,53 +101,45 @@ public class LogFilesPanel extends JPanel {
             scrollPane = new JScrollPane(logList);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane.getViewport().setView(list);
-            scrollPane.setPreferredSize(new Dimension(LogFilesSubPanel.SCROLL_WIDTH, LogFilesSubPanel.SCROLL_HEIGHT));
+            scrollPane.setPreferredSize(new Dimension(LogFileSubPanel.SCROLL_WIDTH, LogFileSubPanel.SCROLL_HEIGHT));
             scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(1,1,5,1), title,
                     TitledBorder.LEFT, TitledBorder.TOP));
 
             GridBagConstraints c = new GridBagConstraints();
-
-            // Add scrollpane to panel
             c.fill = GridBagConstraints.VERTICAL;
-            c.gridx=0;
-            c.gridy=0;
-            c.weightx=0;
-            c.insets = new Insets(1,1,1,1);
+            c.gridx = 0;
+            c.gridy = 0;
+            c.weightx = 0;
+            c.insets = new Insets(1, 1, 1, 1);
             c.anchor = GridBagConstraints.PAGE_START;
             add(scrollPane, c);
         }
 
         @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            /**
-             * Add data to JList in presentation model, caught here.
-             */
-            if (evt.getPropertyName().equals(ILogFilesPresentationModel.LOGGER_PROPERTY)) {
-                ILogFiles logger = (ILogFiles)evt.getNewValue();
+        public void propertyChange(PropertyChangeEvent evt) {  // add logger to list
+            if (evt.getPropertyName().equals(ILogFileModel.LOGGER_PROPERTY)) {
+                ILogFile logger = (ILogFile)evt.getNewValue();
                 logList.addData(logger);
             }
         }
     }
 
     /**
-     * Sub panel, LogFiles video play back features.
+     * Sub panel, LogFile video play back features.
      */
     private class VideoSubPanel extends JPanel implements PropertyChangeListener {
 
         private JLabel previewLabel;
 
-        /**
-         * Constructor.
-         */
         public VideoSubPanel() {
             setLayout(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
-            setPanelDebugBorder(VideoSubPanel.this, DEBUGGER, Color.GREEN);
+            setPanelDebugBorder(VideoSubPanel.this, DEBUG, Color.GREEN);
             previewLabel = new JLabel("Preview video area ...");
             c.fill = GridBagConstraints.VERTICAL;
-            c.gridx=0;
-            c.gridy=0;
-            c.weighty=0;
+            c.gridx = 0;
+            c.gridy = 0;
+            c.weighty = 0;
             c.anchor = GridBagConstraints.PAGE_START;
             c.insets = new Insets(1,1,1,1);
             add(previewLabel, c);
@@ -169,11 +147,12 @@ public class LogFilesPanel extends JPanel {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(ILogFilesPresentationModel.CONTENTS_PROPERTY)) {
-                ILogFiles logger = (ILogFiles)evt.getNewValue();
+
+            if (evt.getPropertyName().equals(ILogFileModel.CONTENTS_PROPERTY)) {
+                ILogFile logger = (ILogFile)evt.getNewValue();
                 VideoSubPanel vPanel = VideoSubPanel.this;
                 vPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(1,1,5,1), logger.getSubject(),
-                        TitledBorder.LEFT, TitledBorder.TOP));
+                    TitledBorder.LEFT, TitledBorder.TOP));
             }
         }
     }

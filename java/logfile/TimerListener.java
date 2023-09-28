@@ -1,3 +1,5 @@
+package com.ultimate-rad-games;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,12 +10,12 @@ import java.beans.PropertyChangeSupport;
  * Timer count down class for DefaultListModel,
  * notify via prop change event when timer expires.
  */
-public class TimerCountActionListener implements ActionListener {
+public class TimerListener implements ActionListener {
 
     private static final int DELAY_MILLISECONDS = 1000;
 
-    private DefaultListModel<ILogFiles> model;
-    private ILogFiles logger;
+    private DefaultListModel<ILogFile> model;
+    private ILogFile logger;
     private int index;
     private int counter;
     private javax.swing.Timer timer;
@@ -22,35 +24,26 @@ public class TimerCountActionListener implements ActionListener {
 
     /**
      * Constructor with DefaultListModel, int arguments.
-     * @param md - DefaultListModel
-     * @param ind - int
+     * @param md DefaultListModel object list input
+     * @param ind int index location
      */
-    public TimerCountActionListener(DefaultListModel<ILogFiles> md, int ind) {
+    public TimerListener(DefaultListModel<ILogFile> md, int ind) {
         pcs = new PropertyChangeSupport(this);
         model = md;
         index = ind;
         logger = md.get(index);
         counter = logger.getCounter();
-
         timer = new javax.swing.Timer(DELAY_MILLISECONDS, this);
         startTimer();
     }
 
-    public void startTimer() {
-        timer.start();
-    }
+    public void startTimer() { timer.start(); }
 
-    public void stopTimer() {
-        timer.stop();
-    }
+    public void stopTimer() { timer.stop(); }
 
-    public void removeCustomPropertyChangeListener(PropertyChangeListener l) {
-        pcs.removePropertyChangeListener(l);
-    }
+    public void removeCustomPropertyChangeListener(PropertyChangeListener l) { pcs.removePropertyChangeListener(l); }
 
-    public void addCustomPropertyChangeListener(PropertyChangeListener l) {
-        pcs.addPropertyChangeListener(l);
-    }
+    public void addCustomPropertyChangeListener(PropertyChangeListener l) { pcs.addPropertyChangeListener(l); }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
@@ -61,7 +54,7 @@ public class TimerCountActionListener implements ActionListener {
          */
         if ( counter <= 0 ) {
             stopTimer();
-            pcs.firePropertyChange(ILogFilesPresentationModel.TIMER_PROPERTY, null, index);
+            pcs.firePropertyChange(ILogFileModel.TIMER_PROPERTY, null, index);
         }
         else {
             logger.setCounter(--counter);

@@ -1,3 +1,5 @@
+package com.ultimate-rad-games;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -9,7 +11,7 @@ import java.beans.PropertyChangeSupport;
 /**
  * Display log file data from presentation model (caught in panel class).
  */
-public class LogFilesList extends JList<ILogFiles> implements PropertyChangeListener {
+public class LogFileList extends JList<ILogFile> implements PropertyChangeListener {
 
     private static final String COMMIT = "Commit";
 
@@ -19,10 +21,10 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
     /**
      * Constructor.
      */
-    public LogFilesList() {
+    public LogFileList() {
 
         commitButton = new JButton(COMMIT);
-        setModel(new DefaultListModel<ILogFiles>());
+        setModel(new DefaultListModel<ILogFile>());
         setCellRenderer(createListCellRenderer());
         setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         setLayoutOrientation(JList.VERTICAL);
@@ -30,38 +32,47 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
 
         pcs = new PropertyChangeSupport(this);
 
-        // mouse listener - released
+        /**
+         * Mouser listener - released
+         */
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 super.mouseReleased(mouseEvent);
+
                 if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
-                    LogFilesList list = LogFilesList.this;
+                    LogFileList list = LogFileList.this;
                     int index = list.locationToIndex(mouseEvent.getPoint());
+
                     if (index != -1 && list.isSelectedIndex(index)) {
-                        ILogFiles logger = (ILogFiles)list.getModel().getElementAt(index);
+                        ILogFile logger = (ILogFile)list.getModel().getElementAt(index);
                         Rectangle rect = list.getCellBounds(index, index);
                         Point pointWithinCell = new Point(mouseEvent.getX() - rect.x, mouseEvent.getY() - rect.y);
-                        Rectangle crossRect = new Rectangle(commitButton.getX(), commitButton.getY(), commitButton.getWidth(), commitButton.getHeight());  //?
+                        Rectangle crossRect = new Rectangle(commitButton.getX(), commitButton.getY(), 
+                            commitButton.getWidth(), commitButton.getHeight());  // inconsistent ?
+
                         if ( crossRect.contains(pointWithinCell) ) {
-                            setCommitButtonState(logger, ILogFiles.ButtonClickState.NOCLICK);
-                            LogFilesList.this.repaint();
+                            setCommitButtonState(logger, ILogFile.ButtonClickState.NOCLICK);
+                            LogFileList.this.repaint();
                         }
                     }
                 }
             }
         });
 
-        // mouse listener - pressed
+        /**
+         * Mouser listener - pressed
+         */        
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 super.mousePressed(mouseEvent);
                 if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
-                    LogFilesList list = LogFilesList.this;
+                    LogFileList list = LogFileList.this;
                     int index = list.locationToIndex(mouseEvent.getPoint());
+
                     if (index != -1 && list.isSelectedIndex(index)) {
-                        ILogFiles logger = (ILogFiles)list.getModel().getElementAt(index);
+                        ILogFile logger = (ILogFile)list.getModel().getElementAt(index);
                         Rectangle rect = list.getCellBounds(index, index);
                         Point pointWithinCell = new Point(mouseEvent.getX() - rect.x, mouseEvent.getY() - rect.y);
                         /**
@@ -70,8 +81,8 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
                         Rectangle crossRect = new Rectangle(commitButton.getX(), commitButton.getY(), commitButton.getWidth(), commitButton.getHeight());  //?
 
                         if ( crossRect.contains(pointWithinCell) ) {
-                            setCommitButtonState(logger, ILogFiles.ButtonClickState.CLICK);
-                            LogFilesList.this.repaint();
+                            setCommitButtonState(logger, ILogFile.ButtonClickState.CLICK);
+                            LogFileList.this.repaint();
                         }
                     }
                 }
@@ -79,46 +90,35 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
         });
     }
 
-    private void setCommitButtonState(ILogFiles logger, ILogFiles.ButtonClickState buttonState) {
-        logger.setButtonClickState(buttonState);
-    }
+    private void setCommitButtonState(ILogFile logger, ILogFile.ButtonClickState buttonState) { logger.setButtonClickState(buttonState); }
 
-    private JButton getCommitButtonState(ILogFiles logger) {
+    private JButton getCommitButtonState(ILogFile logger) {
         JButton button = new JButton(COMMIT);
         final Color base = button.getBackground();
-        if (logger.getButtonEnableState() == ILogFiles.ButtonEnableState.ENABLE) {
+
+        if (logger.getButtonEnableState() == ILogFile.ButtonEnableState.ENABLE) {
             button.setEnabled(true);
-            if (logger.getButtonClickState() == ILogFiles.ButtonClickState.CLICK) {
-                button.setBackground(Color.LIGHT_GRAY);
-            }
-            else {
-                button.setBackground(base);
-            }
-        }
-        else {
-            button.setEnabled(false);
-        }
+
+            if (logger.getButtonClickState() == ILogFile.ButtonClickState.CLICK) { button.setBackground(Color.LIGHT_GRAY); 
+            } else { button.setBackground(base); }
+        } else { button.setEnabled(false); }
         return button;
     }
 
     /**
      * Custom renderer for JList, display ui elements only, no data logic.
-     * @return - DefaultListCellRenderer
+     * @return DefaultListCellRenderer object output
      */
     private DefaultListCellRenderer createListCellRenderer() {
         return new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-                                                          boolean cellHasFocus) {
-                ILogFiles logger = (ILogFiles)value;
+                boolean cellHasFocus) {
+                ILogFile logger = (ILogFile)value;
                 JPanel panel = getCustomizedPanel(logger);
 
-                if (isSelected) {
-                    panel.setBorder( BorderFactory.createLineBorder(Color.BLUE, 2, true) );
-                }
-                else {
-                    panel.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-                }
+                if (isSelected) { panel.setBorder( BorderFactory.createLineBorder(Color.BLUE, 2, true) );
+                } else { panel.setBorder(BorderFactory.createEmptyBorder(2,2,2,2)); }
                 return panel;
             }
         };
@@ -126,36 +126,41 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
 
     /**
      * Custom panel method for renderer.
-     * @param data - ILogFiles
-     * @return - JPanel
+     * @param data ILogFile object input
+     * @return JPanel object output
      */
-    private JPanel getCustomizedPanel(ILogFiles data) {
+    private JPanel getCustomizedPanel(ILogFile data) {
 
-        // panel
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        // int timer count down
-        c.gridx=0;
-        c.gridy=0;
-        c.weightx=1;
+        /**
+         * timer countdown
+         */
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
         c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(1,1,1,1);
+        c.insets = new Insets(1, 1, 1, 1);
         panel.add(createLabelPanel(data.getCounter(), 17, Color.BLACK), c);
 
-        // string subject data
-        c.gridx=1;
-        c.gridy=0;
-        c.weightx=1;
+        /**
+         * subject data
+         */
+        c.gridx = 1;
+        c.gridy = 0;
+        c.weightx = 1;
         c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(1,1,1,1);
+        c.insets = new Insets(1, 1, 1, 1);
         panel.add(createLabelPanel(data.getSubject(), 75, Color.YELLOW), c);
 
-        // commit button
-        c.gridx=2;
-        c.gridy=0;
-        c.weightx=1;
+        /**
+         * commit button
+         */
+        c.gridx = 2;
+        c.gridy = 0;
+        c.weightx = 1;
         c.anchor = GridBagConstraints.WEST;
         commitButton = new JButton(COMMIT);
         commitButton = getCommitButtonState(data);
@@ -167,66 +172,61 @@ public class LogFilesList extends JList<ILogFiles> implements PropertyChangeList
 
     /**
      * Custom label with panel.
-     * @param counter - int
-     * @param labelWidth - int
-     * @param border - Color
-     * @return - JPanel
+     * @param counter int counter
+     * @param labelWidth int label width
+     * @param border Color border
+     * @return JPanel object output
      */
     private JPanel createLabelPanel(Object counter, int labelWidth, Color border) {
         final int lwidth = labelWidth;
+
         JPanel p = new JPanel();
         JLabel label = new JLabel(String.valueOf(counter),JLabel.CENTER);
         label.setBorder(BorderFactory.createLineBorder(border));
+
         Dimension d = label.getPreferredSize();
         label.setPreferredSize(new Dimension(lwidth + 30, d.height));
         p.add(label);
+
         return p;
     }
 
     /**
-     * Add data to LogFiles list, initialize Timer - start count down.
+     * Add data to LogFile list, initialize Timer - start count down.
      * Add JList listener to Timer class to catch property.
-     * @param logger - ILogFiles
+     * @param logger ILogFile object input
      */
-    public void addData(ILogFiles logger) {
-        DefaultListModel model = (DefaultListModel<ILogFiles>)getModel();
+    public void addData(ILogFile logger) {
+        DefaultListModel model = (DefaultListModel<ILogFile>)getModel();
         model.addElement(logger);
-        TimerCountActionListener tcal = new TimerCountActionListener(model, model.indexOf(logger));
-        tcal.addCustomPropertyChangeListener(LogFilesList.this);
+
+        TimerListener tcal = new TimerListener(model, model.indexOf(logger));
+        tcal.addCustomPropertyChangeListener(LogFileList.this);
     }
 
     /**
-     * Clear list data from LogFiles list.
+     * Clear list data from LogFile list.
      */
     public void clearData() {
-        DefaultListModel model = (DefaultListModel<ILogFiles>)getModel();
+        DefaultListModel model = (DefaultListModel<ILogFile>)getModel();
         model.clear();
     }
 
-    /*
-     * Panel listeners and property change events.
-     */
+    // Panel listeners and property change events
+    public void removeCustomPropertyChangeListener(PropertyChangeListener l) { pcs.removePropertyChangeListener(l); }
 
-    public void removeCustomPropertyChangeListener(PropertyChangeListener l) {
-        pcs.removePropertyChangeListener(l);
-    }
-
-    public void addCustomPropertyChangeListener(PropertyChangeListener l) {
-        pcs.addPropertyChangeListener(l);
-    }
+    public void addCustomPropertyChangeListener(PropertyChangeListener l) { pcs.addPropertyChangeListener(l); }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        /*
-         * Catch Timer Property, disable Commit button
-         */
-        if (evt.getPropertyName().equals(ILogFilesPresentationModel.TIMER_PROPERTY)) {
+    public void propertyChange(PropertyChangeEvent evt) {  // timer catch event property
+        if (evt.getPropertyName().equals(ILogFilePresentationModel.TIMER_PROPERTY)) {
             int indx = (int)evt.getNewValue();
-            DefaultListModel model = (DefaultListModel<ILogFiles>)getModel();
-            ILogFiles loggy = (ILogFiles)model.getElementAt(indx);
-            loggy.setButtonEnableState(ILogFiles.ButtonEnableState.DISABLE);
-            LogFilesList.this.repaint();
+
+            DefaultListModel model = (DefaultListModel<ILogFile>)getModel();
+            ILogFile loggy = (ILogFile)model.getElementAt(indx);
+            loggy.setButtonEnableState(ILogFile.ButtonEnableState.DISABLE);
+            
+            LogFileList.this.repaint();
         }
     }
-
 }

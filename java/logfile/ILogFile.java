@@ -1,7 +1,9 @@
+package com.ultimate-rad-games;
+
 /**
- * Interface for LogFiles bean.
+ * Interface for LogFile bean.
  */
-public interface ILogFiles {
+public interface ILogFile {
 
     enum ButtonEnableState {ENABLE, DISABLE}
     enum ButtonClickState {CLICK, NOCLICK}
