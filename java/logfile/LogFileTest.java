@@ -1,5 +1,3 @@
-package com.ultimate-rad-games;
-
 public class LogFileTest implements ILogFile {
 
     private String subject;

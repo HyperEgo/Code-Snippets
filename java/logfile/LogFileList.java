@@ -1,5 +1,3 @@
-package com.ultimate-rad-games;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -219,7 +217,7 @@ public class LogFileList extends JList<ILogFile> implements PropertyChangeListen
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {  // timer catch event property
-        if (evt.getPropertyName().equals(ILogFilePresentationModel.TIMER_PROPERTY)) {
+        if (evt.getPropertyName().equals(ILogFileModel.TIMER_PROPERTY)) {
             int indx = (int)evt.getNewValue();
 
             DefaultListModel model = (DefaultListModel<ILogFile>)getModel();

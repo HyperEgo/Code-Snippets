@@ -1,5 +1,3 @@
-package com.ultimate-rad-games;
-
 /**
  * Interface for LogFile bean.
  */

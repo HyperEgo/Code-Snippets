@@ -1,5 +1,3 @@
-package com.ultimate-rad-games;
-
 import javax.swing.*;
 import java.awt.*;
 

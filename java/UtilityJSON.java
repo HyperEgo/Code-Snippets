@@ -8,8 +8,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import java.io.IOException;
 
-import java.util.Properties;
-
 import java.util.Iterator;
 
 /**
@@ -42,13 +40,13 @@ public class UtilityJSON {
      */
     private void parse(final JsonNode root) {
 
-        if (root.isObject()){
+        if (root.isObject()) {
             Iterator<String> iterator = root.fieldNames();            
             while (iterator.hasNext()) {
                 String name = iterator.next();
                 JsonNode child = root.get(name);
                 inspect(root, name);
-                obfuscate(name, child, root);                
+                obfuscate(root, child, name);                  
                 parse(child);
             }
         } else if (root.isArray()) {
@@ -69,8 +67,8 @@ public class UtilityJSON {
 
         final String DEBUG = HDR + "inspect()::";
 
-        final String REGEX_FIELD = "some_string_value";
-        final String REGEX_VALUE = "some_other_string_value";
+        final String REGEX_FIELD = "field";
+        final String REGEX_VALUE = "value";
 
         if ( isNode(node) && isString(field) ) {
             final String VALUE = node.get(field).asText();
@@ -83,16 +81,16 @@ public class UtilityJSON {
 
     /**
      * Obfuscate JsonNode value parameter.
-     * @param name String containing sensitive data.
-     * @param child JsonNode child tree-node object.
      * @param parent JsonNode parent tree-node object.
+     * @param child JsonNode child tree-node object.
+     * @param name String containing sensitive data.
      */
-    private void obfuscate(final String name, JsonNode child, JsonNode parent) {
+    private void obfuscate(JsonNode parent, JsonNode child, final String name ) {        
         auditlog.traceEntry();        
 
         final String MASK = "********";
 
-        if (checkString(name) && checkNode(child) && this.field.contains(name)) {
+        if ( isNode(child) && isString(name) && this.field.contains(name) ) {
             ((ObjectNode)parent).put(name, MASK);
         }
     }    
@@ -117,17 +115,18 @@ public class UtilityJSON {
 
     /**
      * Deserialize JSON string data structure to class object.
-     * @param incomingJson String JSON data.
+     * @param inJson String JSON data.
+     * @param classObject class template deserialize type
      * @return Object output
      */
-    private Object deserializeJSON(final String incomingJson) {
+    private Object deserializeJSON(final String inJson, Class<T> classObject) {
 
         final String DEBUG = "deserializeJSON()::";
 
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
-            return mapper.readValue(incomingJson, Class<T>.class);
+            return mapper.readValue(inJson, classObject.class);
         } catch (IOException e) { 
             System.out.println(DEBUG + e.getMessage());
             return null;

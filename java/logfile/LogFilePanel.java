@@ -1,5 +1,3 @@
-package com.ultimate-rad-games;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;

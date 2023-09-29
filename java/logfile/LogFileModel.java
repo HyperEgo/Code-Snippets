@@ -1,5 +1,3 @@
-package com.ultimate-rad-games;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
