@@ -1,5 +1,3 @@
-package com.ultimate-rad-games;
-
 import java.util.EventListener;
 
 public interface FileListener extends EventListener {

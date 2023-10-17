@@ -1,8 +1,3 @@
-package com.ultimate-rad-games;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import static java.nio.file.StandardWatchEventKinds.*;
 
 import java.io.File;

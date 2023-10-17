@@ -1,5 +1,3 @@
-package com.ultimate-rad-games;
-
 import java.io.File;
 import java.util.EventObject;
 
