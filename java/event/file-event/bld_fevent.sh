@@ -4,4 +4,4 @@
 
 rm -rvf *.class
 javac FileEventTest.java
-java FileEventTest SourceCatcher
+java FileEventTest

@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.util.Iterator;
 
 /**
- * JSON utility and inspection methods.
+ * JSON utility: inspect, traverse, verify.
  */
-public class UtilityJSON {
+public class JsonUtil {
 
     final String HDR = "UtilityJSON";
 

@@ -17,7 +17,7 @@ public class EventFire {
 
 		final String DEBUG = HDR + "fire()::";
 
-		model.fireEvent(IModel.PRACTICE_EVENT, DUD);
+		model.fireEvent(Model.PRACTICE_EVENT, DUD);
 
 		System.out.println(DEBUG);		
 	}
@@ -26,7 +26,7 @@ public class EventFire {
 
 		final String DEBUG = HDR + "firePayload()::";		
 
-		model.fireEvent(IModel.PAYLOAD_EVENT, loadout);
+		model.fireEvent(Model.PAYLOAD_EVENT, loadout);
 
 		System.out.println(DEBUG);		
 	}	

@@ -2,9 +2,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class Model implements IModel {
+public class Model {
 
-	final String HDR = "Model::";
+	public static final String PRACTICE_EVENT = "PRACTICE_EVENT";
+	public static final String PAYLOAD_EVENT = "PAYLOAD_EVENT";	
+
+	private final String HDR = "Model::";
 	
 	private PropertyChangeSupport pcs;
 
@@ -41,5 +44,4 @@ public class Model implements IModel {
 
 		System.out.println( DEBUG + value.toString() );
 	}	
-
 }

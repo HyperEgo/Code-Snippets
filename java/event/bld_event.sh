@@ -3,5 +3,5 @@
 # build event class constructs
 
 rm -rvf *.class
-javac EventCatch.java
-java EventCatch
+javac EventTest.java
+java EventTest.java

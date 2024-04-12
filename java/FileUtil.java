@@ -11,9 +11,9 @@ import java.io.FileFilter;
 import java.io.IOException;
 
 /**
- * Method utilities.
+ * File manipulation: hard-link, delete, verify.
  */
-public class Utility {
+public class FileUtil {
 
     /**
     * Hard-link file source to target.
